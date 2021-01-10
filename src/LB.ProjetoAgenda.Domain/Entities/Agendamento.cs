@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LB.ProjetoAgenda.Domain.Entities
 {
-    class Agendamento
+    public class Agendamento
     {
         public Agendamento()
         {

@@ -18,6 +18,7 @@ namespace LB.ProjetoAgenda.Domain.Entities
         public DateTime DataNascimento { get; set; }
         public DateTime DataCadastro { get; set; }
         public bool Ativo { get; set; }
-        public Guid AgendamentoId { get; set; }        
+        public Guid AgendamentoId { get; set; }
+        public Agendamento Agendamento { get; set; }
     }
 }
