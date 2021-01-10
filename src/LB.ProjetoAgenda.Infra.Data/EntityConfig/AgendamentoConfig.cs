@@ -24,6 +24,10 @@ namespace LB.ProjetoAgenda.Infra.Data.EntityConfig
 
             Property(a => a.FormaPagamento)
                 .IsRequired();
+            
+            //HasRequired(a => a.Cliente)
+            //    .WithMany(c => c.Agendamento)
+            //    .HasForeignKey(a => a.ClienteId);
 
             ToTable("Agendamentos");
 

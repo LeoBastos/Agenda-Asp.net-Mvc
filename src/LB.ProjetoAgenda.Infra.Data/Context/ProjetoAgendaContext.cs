@@ -18,9 +18,9 @@ namespace LB.ProjetoAgenda.Infra.Data.Context
 
         }
 
-        public DbSet<Cliente> Clientes { get; set; }
-        public DbSet<Agendamento> Agendamentos { get; set; }
-        public DbSet<Servico> Servicos { get; set; }
+        public DbSet<Cliente> Cliente { get; set; }
+        public DbSet<Agendamento> Agendamento { get; set; }
+        public DbSet<Servico> Servico { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

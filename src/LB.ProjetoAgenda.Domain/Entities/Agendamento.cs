@@ -19,5 +19,9 @@ namespace LB.ProjetoAgenda.Domain.Entities
         public string Tipo { get; set; }
         public string FormaPagamento { get; set; }
         public DateTime DataCadastroAgendamento { get; set; }
+        public Guid ClienteId { get; set; }
+        public Cliente Cliente { get; set; }
+        public Guid ServicoId { get; set; }
+        public Servico Servico { get; set; }
     }
 }

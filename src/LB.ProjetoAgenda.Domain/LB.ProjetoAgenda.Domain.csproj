@@ -37,6 +37,10 @@
     <Compile Include="Entities\Agendamento.cs" />
     <Compile Include="Entities\Cliente.cs" />
     <Compile Include="Entities\Servico.cs" />
+    <Compile Include="Interfaces\Repository\IAgendamentoRepository.cs" />
+    <Compile Include="Interfaces\Repository\IClienteRepository.cs" />
+    <Compile Include="Interfaces\Repository\IRepository.cs" />
+    <Compile Include="Interfaces\Repository\IServicoRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
