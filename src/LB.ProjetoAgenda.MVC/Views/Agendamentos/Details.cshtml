@@ -1,0 +1,58 @@
+﻿@model LB.ProjetoAgenda.Application.ViewModel.AgendamentoViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>AgendamentoViewModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DataAgendamento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataAgendamento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HoraInicial)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HoraInicial)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HoraFinal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HoraFinal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tipo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tipo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FormaPagamento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FormaPagamento)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AgendamentoId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
