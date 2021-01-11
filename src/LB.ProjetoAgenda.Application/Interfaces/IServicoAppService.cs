@@ -11,6 +11,7 @@ namespace LB.ProjetoAgenda.Application.Interfaces
     interface IServicoAppService : IDisposable
     {
         AgendaViewModel Adicionar(AgendaViewModel servicoAgendaViewModel);
+        ServicoViewModel ObterPorId(Guid id);
         ServicoViewModel ObterPorNomeServico(string nomeServico);        
         IEnumerable<ServicoViewModel> ObterTodos();
         ServicoViewModel Atualizar(ServicoViewModel servicoViewModel);

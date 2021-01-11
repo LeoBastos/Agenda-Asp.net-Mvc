@@ -7,6 +7,7 @@ namespace LB.ProjetoAgenda.Infra.Data.Repositories
 {
     public class AgendamentoRepository : Repository<Agendamento>, IAgendamentoRepository
     {
+       
         public Agendamento ObterPorFormaPagamento(string forma)
         {
             return Buscar(a => a.FormaPagamento == forma).FirstOrDefault();

@@ -30,10 +30,6 @@ namespace LB.ProjetoAgenda.MVC.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<LB.ProjetoAgenda.Application.ViewModel.ClienteViewModel> ClienteViewModels { get; set; }
-
-        public System.Data.Entity.DbSet<LB.ProjetoAgenda.Application.ViewModel.AgendamentoViewModel> AgendamentoViewModels { get; set; }
-
-        public System.Data.Entity.DbSet<LB.ProjetoAgenda.Application.ViewModel.ServicoViewModel> ServicoViewModels { get; set; }
+       
     }
 }

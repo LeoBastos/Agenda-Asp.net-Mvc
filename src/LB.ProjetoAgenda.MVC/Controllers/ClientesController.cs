@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
+using LB.ProjetoAgenda.Application;
 using LB.ProjetoAgenda.Application.ViewModel;
 using LB.ProjetoAgenda.MVC.Models;
 
@@ -13,12 +9,17 @@ namespace LB.ProjetoAgenda.MVC.Controllers
 {
     public class ClientesController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ClienteAppService _clienteAppService;
+
+        public ClientesController()
+        {
+            _clienteAppService = new ClienteAppService();
+        }
 
         // GET: Clientes
         public ActionResult Index()
         {
-            return View(db.ClienteViewModels.ToList());
+            return View(_clienteAppService.ObterTodos());
         }
 
         // GET: Clientes/Details/5
@@ -28,7 +29,9 @@ namespace LB.ProjetoAgenda.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClienteViewModel clienteViewModel = db.ClienteViewModels.Find(id);
+
+            var clienteViewModel = _clienteAppService.ObterPorId(id.Value);
+
             if (clienteViewModel == null)
             {
                 return HttpNotFound();
@@ -47,17 +50,16 @@ namespace LB.ProjetoAgenda.MVC.Controllers
         // Para obter mais detalhes, confira https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ClienteId,Nome,Email,CPF,DataNascimento,DataCadastro,Ativo")] ClienteViewModel clienteViewModel)
+        public ActionResult Create(AgendaViewModel agendaViewModel)
         {
             if (ModelState.IsValid)
             {
-                clienteViewModel.ClienteId = Guid.NewGuid();
-                db.ClienteViewModels.Add(clienteViewModel);
-                db.SaveChanges();
+                _clienteAppService.Adicionar(agendaViewModel);
+                
                 return RedirectToAction("Index");
             }
 
-            return View(clienteViewModel);
+            return View(agendaViewModel);
         }
 
         // GET: Clientes/Edit/5
@@ -67,7 +69,7 @@ namespace LB.ProjetoAgenda.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClienteViewModel clienteViewModel = db.ClienteViewModels.Find(id);
+            var clienteViewModel = _clienteAppService.ObterPorId(id.Value);
             if (clienteViewModel == null)
             {
                 return HttpNotFound();
@@ -80,12 +82,12 @@ namespace LB.ProjetoAgenda.MVC.Controllers
         // Para obter mais detalhes, confira https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ClienteId,Nome,Email,CPF,DataNascimento,DataCadastro,Ativo")] ClienteViewModel clienteViewModel)
+        public ActionResult Edit(ClienteViewModel clienteViewModel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(clienteViewModel).State = EntityState.Modified;
-                db.SaveChanges();
+                _clienteAppService.Atualizar(clienteViewModel);
+
                 return RedirectToAction("Index");
             }
             return View(clienteViewModel);
@@ -98,7 +100,9 @@ namespace LB.ProjetoAgenda.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClienteViewModel clienteViewModel = db.ClienteViewModels.Find(id);
+            
+            var clienteViewModel = _clienteAppService.ObterPorId(id.Value);
+
             if (clienteViewModel == null)
             {
                 return HttpNotFound();
@@ -111,9 +115,8 @@ namespace LB.ProjetoAgenda.MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            ClienteViewModel clienteViewModel = db.ClienteViewModels.Find(id);
-            db.ClienteViewModels.Remove(clienteViewModel);
-            db.SaveChanges();
+            _clienteAppService.Remover(id);
+
             return RedirectToAction("Index");
         }
 
@@ -121,7 +124,7 @@ namespace LB.ProjetoAgenda.MVC.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _clienteAppService.Dispose();
             }
             base.Dispose(disposing);
         }

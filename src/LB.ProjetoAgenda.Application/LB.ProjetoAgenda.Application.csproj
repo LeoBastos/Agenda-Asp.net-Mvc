@@ -57,6 +57,7 @@
     <Compile Include="Interfaces\IClienteAppService.cs" />
     <Compile Include="Interfaces\IServicoAppService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServicoAppService.cs" />
     <Compile Include="ViewModel\AgendamentoViewModel.cs" />
     <Compile Include="ViewModel\AgendaViewModel.cs" />
     <Compile Include="ViewModel\ClienteViewModel.cs" />

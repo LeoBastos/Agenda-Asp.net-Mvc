@@ -11,10 +11,11 @@ namespace LB.ProjetoAgenda.Application.Interfaces
     interface IAgendamentoAppService : IDisposable
     {
         AgendaViewModel Adicionar(AgendaViewModel agendamentoAgendaViewModel);
+        AgendamentoViewModel ObterPorId(Guid id);
         AgendamentoViewModel ObterPorTipo(string tipo);
         AgendamentoViewModel ObterPorFormaPagamento(string forma);      
         IEnumerable<AgendamentoViewModel> ObterTodos();
         AgendamentoViewModel Atualizar(AgendamentoViewModel agendamentoViewModel);
-        void Remover(Guid id);
+        void Remover(Guid id);       
     }
 }

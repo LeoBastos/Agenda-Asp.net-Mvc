@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using LB.ProjetoAgenda.Application;
 using LB.ProjetoAgenda.Application.ViewModel;
 using LB.ProjetoAgenda.MVC.Models;
 
@@ -13,12 +10,17 @@ namespace LB.ProjetoAgenda.MVC.Controllers
 {
     public class AgendamentosController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly AgendamentoAppService _agendamentoAppService;
+
+        public AgendamentosController()
+        {
+            _agendamentoAppService = new AgendamentoAppService();
+        }
 
         // GET: Agendamentos
         public ActionResult Index()
         {
-            return View(db.AgendamentoViewModels.ToList());
+            return View(_agendamentoAppService.ObterTodos());
         }
 
         // GET: Agendamentos/Details/5
@@ -28,7 +30,9 @@ namespace LB.ProjetoAgenda.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AgendamentoViewModel agendamentoViewModel = db.AgendamentoViewModels.Find(id);
+
+            var agendamentoViewModel = _agendamentoAppService.ObterPorId(id.Value);
+
             if (agendamentoViewModel == null)
             {
                 return HttpNotFound();
@@ -47,17 +51,16 @@ namespace LB.ProjetoAgenda.MVC.Controllers
         // Para obter mais detalhes, confira https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "AgendamentoId,DataAgendamento,HoraInicial,HoraFinal,Tipo,FormaPagamento,DataCadastroAgendamento")] AgendamentoViewModel agendamentoViewModel)
+        public ActionResult Create(AgendaViewModel agendaViewModel)
         {
             if (ModelState.IsValid)
             {
-                agendamentoViewModel.AgendamentoId = Guid.NewGuid();
-                db.AgendamentoViewModels.Add(agendamentoViewModel);
-                db.SaveChanges();
+                _agendamentoAppService.Adicionar(agendaViewModel);
+
                 return RedirectToAction("Index");
             }
 
-            return View(agendamentoViewModel);
+            return View(agendaViewModel);
         }
 
         // GET: Agendamentos/Edit/5
@@ -67,7 +70,7 @@ namespace LB.ProjetoAgenda.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AgendamentoViewModel agendamentoViewModel = db.AgendamentoViewModels.Find(id);
+            var agendamentoViewModel = _agendamentoAppService.ObterPorId(id.Value);
             if (agendamentoViewModel == null)
             {
                 return HttpNotFound();
@@ -80,12 +83,12 @@ namespace LB.ProjetoAgenda.MVC.Controllers
         // Para obter mais detalhes, confira https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "AgendamentoId,DataAgendamento,HoraInicial,HoraFinal,Tipo,FormaPagamento,DataCadastroAgendamento")] AgendamentoViewModel agendamentoViewModel)
+        public ActionResult Edit(AgendamentoViewModel agendamentoViewModel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(agendamentoViewModel).State = EntityState.Modified;
-                db.SaveChanges();
+                _agendamentoAppService.Atualizar(agendamentoViewModel);
+
                 return RedirectToAction("Index");
             }
             return View(agendamentoViewModel);
@@ -98,7 +101,9 @@ namespace LB.ProjetoAgenda.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AgendamentoViewModel agendamentoViewModel = db.AgendamentoViewModels.Find(id);
+
+            var agendamentoViewModel = _agendamentoAppService.ObterPorId(id.Value);
+
             if (agendamentoViewModel == null)
             {
                 return HttpNotFound();
@@ -111,9 +116,8 @@ namespace LB.ProjetoAgenda.MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            AgendamentoViewModel agendamentoViewModel = db.AgendamentoViewModels.Find(id);
-            db.AgendamentoViewModels.Remove(agendamentoViewModel);
-            db.SaveChanges();
+            _agendamentoAppService.Remover(id);
+
             return RedirectToAction("Index");
         }
 
@@ -121,7 +125,7 @@ namespace LB.ProjetoAgenda.MVC.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _agendamentoAppService.Dispose();
             }
             base.Dispose(disposing);
         }

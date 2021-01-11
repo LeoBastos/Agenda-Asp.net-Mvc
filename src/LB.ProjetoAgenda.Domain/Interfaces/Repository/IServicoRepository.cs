@@ -10,5 +10,6 @@ namespace LB.ProjetoAgenda.Domain.Interfaces.Repository
     public interface IServicoRepository : IRepository<Servico>
     {
         Servico ObterPorNomeServico(string nomeServico);
+        Servico ObetrPorId(Guid id);        
     }
 }

@@ -44,6 +44,11 @@ namespace LB.ProjetoAgenda.Application
             return Mapper.Map<Agendamento, AgendamentoViewModel>(_agendamentoRepository.ObterPorFormaPagamento(forma));
         }
 
+        public AgendamentoViewModel ObterPorId(Guid id)
+        {
+            return Mapper.Map<Agendamento, AgendamentoViewModel>(_agendamentoRepository.ObterPorId(id));
+        }
+
         public AgendamentoViewModel ObterPorTipo(string tipo)
         {
             return Mapper.Map<Agendamento, AgendamentoViewModel>(_agendamentoRepository.ObterPorTipo(tipo));

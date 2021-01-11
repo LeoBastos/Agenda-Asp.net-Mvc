@@ -1,24 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
+using LB.ProjetoAgenda.Application;
 using LB.ProjetoAgenda.Application.ViewModel;
-using LB.ProjetoAgenda.MVC.Models;
+
 
 namespace LB.ProjetoAgenda.MVC.Controllers
 {
     public class ServicosController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ServicoAppService _servicoAppService;
+
+        public ServicosController()
+        {
+            _servicoAppService = new ServicoAppService();
+        }
 
         // GET: Servicos
         public ActionResult Index()
         {
-            return View(db.ServicoViewModels.ToList());
+            return View(_servicoAppService.ObterTodos());
         }
 
         // GET: Servicos/Details/5
@@ -28,7 +29,9 @@ namespace LB.ProjetoAgenda.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ServicoViewModel servicoViewModel = db.ServicoViewModels.Find(id);
+
+            var servicoViewModel = _servicoAppService.ObterPorId(id.Value);
+
             if (servicoViewModel == null)
             {
                 return HttpNotFound();
@@ -47,17 +50,16 @@ namespace LB.ProjetoAgenda.MVC.Controllers
         // Para obter mais detalhes, confira https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ServicoId,NomeServico")] ServicoViewModel servicoViewModel)
+        public ActionResult Create(AgendaViewModel agendaViewModel)
         {
             if (ModelState.IsValid)
             {
-                servicoViewModel.ServicoId = Guid.NewGuid();
-                db.ServicoViewModels.Add(servicoViewModel);
-                db.SaveChanges();
+                _servicoAppService.Adicionar(agendaViewModel);
+
                 return RedirectToAction("Index");
             }
 
-            return View(servicoViewModel);
+            return View(agendaViewModel);
         }
 
         // GET: Servicos/Edit/5
@@ -67,7 +69,8 @@ namespace LB.ProjetoAgenda.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ServicoViewModel servicoViewModel = db.ServicoViewModels.Find(id);
+            var servicoViewModel = _servicoAppService.ObterPorId(id.Value);
+            
             if (servicoViewModel == null)
             {
                 return HttpNotFound();
@@ -80,12 +83,12 @@ namespace LB.ProjetoAgenda.MVC.Controllers
         // Para obter mais detalhes, confira https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ServicoId,NomeServico")] ServicoViewModel servicoViewModel)
+        public ActionResult Edit(ServicoViewModel servicoViewModel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(servicoViewModel).State = EntityState.Modified;
-                db.SaveChanges();
+                _servicoAppService.Atualizar(servicoViewModel);
+
                 return RedirectToAction("Index");
             }
             return View(servicoViewModel);
@@ -98,7 +101,9 @@ namespace LB.ProjetoAgenda.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ServicoViewModel servicoViewModel = db.ServicoViewModels.Find(id);
+
+            var servicoViewModel = _servicoAppService.ObterPorId(id.Value);
+
             if (servicoViewModel == null)
             {
                 return HttpNotFound();
@@ -111,9 +116,8 @@ namespace LB.ProjetoAgenda.MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            ServicoViewModel servicoViewModel = db.ServicoViewModels.Find(id);
-            db.ServicoViewModels.Remove(servicoViewModel);
-            db.SaveChanges();
+            _servicoAppService.Remover(id);
+
             return RedirectToAction("Index");
         }
 
@@ -121,7 +125,7 @@ namespace LB.ProjetoAgenda.MVC.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _servicoAppService.Dispose();
             }
             base.Dispose(disposing);
         }
